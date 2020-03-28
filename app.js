@@ -56,8 +56,6 @@ const transform = async file => {
   inputFile = `/tmp/inputFile.jpg`;
   fs.writeFileSync(inputFile, file.buffer);
 
-  // ok to delete multer upload
-  fs.unlinkSync(`${__dirname}/uploads/${file.originalname}`);
 
   customArgs.unshift(inputFile);
   outputFile = `/tmp/outputFile.jpg`;
