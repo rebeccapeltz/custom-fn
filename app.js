@@ -1,0 +1,133 @@
+require("dotenv").config();
+const im = require("imagemagick");
+
+var express = require("express");
+var multer = require("multer");
+var app = express();
+var path = require("path");
+var fs = require("fs");
+
+const fail = message => {
+  console.log(message);
+  throw new Error(message);
+};
+
+const perform = (operation, args) =>
+  new Promise((resolve, reject) =>
+    im[operation](args, (err, res) => {
+      if (err) {
+        console.log(`${operation} operation failed:`, err);
+        reject(err);
+      } else {
+        console.log(`${operation} completed successfully`);
+        resolve(res);
+      }
+    })
+  );
+const postProcessResource = (resource, fn) => {
+  let ret = null;
+  if (resource) {
+    if (fn) {
+      ret = fn(resource);
+    }
+    try {
+      fs.unlinkSync(resource);
+    } catch (err) {
+      // Ignore
+    }
+  }
+  return ret;
+};
+const transform = async file => {
+  // current time as string
+  const date = new Date().toDateString();
+  // transformation in imagemagick: resize to 314px, overlay text at x=5px, y=20px.
+  const customArgs = [
+    "-resize",
+    "314x",
+    "-fill",
+    "blue",
+    "-draw",
+    `text 5,20 '${date}'`
+  ];
+  // prepare input and output files
+  let inputFile = null;
+  let outputFile = null;
+  inputFile = `/tmp/inputFile.jpg`;
+  fs.writeFileSync(inputFile, file.buffer);
+  customArgs.unshift(inputFile);
+  outputFile = `/tmp/outputFile.jpg`;
+  customArgs.push(outputFile);
+  // actual conversion
+  try {
+    const output = await perform("convert", customArgs);
+    postProcessResource(inputFile);
+    if (outputFile) {
+      return postProcessResource(outputFile, file =>
+        Buffer.from(fs.readFileSync(file))
+      );
+    }
+    // Return the command line output as a debugging aid
+    return output;
+  } catch (err) {
+    fail("perform fail:", err);
+  }
+};
+
+app.get("/", function(req, res) {
+  res.json({ message: "use /api/file to post file for transform" });
+});
+
+// memory
+var storage = multer.memoryStorage();
+var upload = multer({ storage: storage });
+
+app.post("/api/file", upload.fields([{ name: "name" }]), function(req, res) {
+  return transform(req.files.name[0])
+    .then(result => {
+      // return the image and new metadata.
+      if (req.queryStringParameters && req.queryStringParameters.cldb) {
+        const bodyLengthBuf = Buffer.alloc(4);
+        const bodyLength = result.length;
+        bodyLengthBuf.writeUInt32BE(bodyLength);
+        const metadata = Buffer.from(
+          JSON.stringify({ coordinates: { custom: [[45, 57, 100, 120]] } })
+        );
+        const metadataLengthBuf = Buffer.alloc(4);
+        const metadataLength = metadata.length;
+        metadataLengthBuf.writeUInt32BE(metadataLength);
+        result = Buffer.concat(
+          [
+            Buffer.from("CLDB"),
+            bodyLengthBuf,
+            result,
+            metadataLengthBuf,
+            metadata
+          ],
+          3 * 4 + metadataLength + bodyLength
+        );
+      }
+
+      res.statusCode = 200;
+      res.headers = {
+        "Content-Type": "image/jpeg",
+        "Content-Length": result.length
+      };
+      res.isBase64Encoded = true;
+      res.send(result);
+    })
+    .catch(error => {
+      console.log("error xxx");
+      console.log(error);
+    
+      res.statusCode = 502;
+      res.headers = { "Content-Type": "application/json" };
+      const body = `{"error": "Error manipulating image ${error}"}`
+      res.send(body)
+    });
+});
+const port = 3000;
+
+app.listen(port, () =>
+  console.info(`Server is up on http://localhost:${port}`)
+);
