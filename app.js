@@ -53,11 +53,11 @@ const transform = async file => {
   // prepare input and output files
   let inputFile = null;
   let outputFile = null;
-  inputFile =  `${__dirname}/tmp/inputFile.jpg`;
+  inputFile = `${__dirname}/tmp/inputFile.jpg`;
   fs.writeFileSync(inputFile, file.buffer);
 
   // ok to delete multer upload
-  fs.unlinkSync(`${__dirname}/uploads/${file.originalname}`)
+  fs.unlinkSync(`${__dirname}/uploads/${file.originalname}`);
 
   customArgs.unshift(inputFile);
   outputFile = `${__dirname}/tmp/outputFile.jpg`;
@@ -123,15 +123,15 @@ app.post("/api/file", upload.fields([{ name: "name" }]), function(req, res) {
     .catch(error => {
       console.log("error xxx");
       console.log(error);
-    
+
       res.statusCode = 502;
       res.headers = { "Content-Type": "application/json" };
-      const body = `{"error": "Error manipulating image ${error}"}`
-      res.send(body)
+      const body = `{"error": "Error manipulating image ${error}"}`;
+      res.send(body);
     });
 });
-const port = 3000;
+app.set("port", process.env.PORT || 5000);
 
-app.listen(port, () =>
-  console.info(`Server is up on http://localhost:${port}`)
+app.listen(app.get("port"), () =>
+  console.log("App is running, server is listening on port ", app.get("port"))
 );
