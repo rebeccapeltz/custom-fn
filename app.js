@@ -53,10 +53,14 @@ const transform = async file => {
   // prepare input and output files
   let inputFile = null;
   let outputFile = null;
-  inputFile = `/tmp/inputFile.jpg`;
+  inputFile =  `${__dirname}/tmp/inputFile.jpg`;
   fs.writeFileSync(inputFile, file.buffer);
+
+  // ok to delete multer upload
+  fs.unlinkSync(`${__dirname}/uploads/${file.originalname}`)
+
   customArgs.unshift(inputFile);
-  outputFile = `/tmp/outputFile.jpg`;
+  outputFile = `${__dirname}/tmp/outputFile.jpg`;
   customArgs.push(outputFile);
   // actual conversion
   try {
