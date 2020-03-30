@@ -84,8 +84,8 @@ app.get("/", function(req, res) {
 var storage = multer.memoryStorage();
 var upload = multer({ storage: storage });
 
-app.post("/api/file", upload.fields([{ name: "name" }]), function(req, res) {
-  return transform(req.files.name[0])
+app.post("/api/file", upload.fields([{ name: "file" }]), function(req, res) {
+  return transform(req.files.file[0])
     .then(result => {
       // return the image and new metadata.
       if (req.queryStringParameters && req.queryStringParameters.cldb) {
