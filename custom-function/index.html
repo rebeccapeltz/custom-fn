@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Custom Functions</title>
+  <style>
+    .container {
+      display:grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      grid-gap: 5px;
+    }
+   .container img{
+     width: 90%;
+     height: auto;
+   }
+    
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div>
+      <h2>original</h2>
+      <img src='http://res.cloudinary.com/pictures77/image/upload/tiger-lilly' />
+    </div>
+    <div>
+      <h2>wasm quantize</h2>
+      <img src='http://res.cloudinary.com/pictures77/image/upload/$colors_4,fn_wasm:wasm_example_quantize.wasm/tiger-lilly' />
+    </div>
+    <div>
+      <h2>wasm blur</h2>
+      <img src='http://res.cloudinary.com/pictures77/image/upload/fn_wasm:wasm_example_blur.wasm/tiger-lilly' />
+    </div>
+    
+
+</body>
+
+</html>
