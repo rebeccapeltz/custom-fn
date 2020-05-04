@@ -1,12 +1,8 @@
 require("dotenv").config();
 const cloudinary = require("cloudinary").v2;
 
-cloudinary.uploader
-  .destroy("horse", {
-    invalidate: true,
-    type: "upload",
-    resource_type: "image",
-  })
+cloudinary.api
+  .delete_resources(["tree"])
   .then((result) => {
     console.log(result);
   })

@@ -3,8 +3,8 @@ const cloudinary = require('cloudinary').v2
 
 
     cloudinary.uploader
-      .upload('https://images.pexels.com/photos/635499/pexels-photo-635499.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500', {
-        public_id: 'horse',
+      .upload('https://images.pexels.com/photos/1102909/pexels-photo-1102909.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260', {
+        public_id: 'tree',
         overwrite: true,
         invalidate: true
       })
