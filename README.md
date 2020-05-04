@@ -1,6 +1,29 @@
 # Custom Fn
 
+
+
 ## Custom functon to transform an image
+
+## Remote function
+
+### Deploy app to heroku
+## Deply to heroku
+
+https://devcenter.heroku.com/articles/git  
+
+- add heroku app as git remote
+```bash
+heroku git:remote -a  secure-caverns-90265
+```
+ - set up **Procfile** for heroku app start
+```bash
+web: node app.js
+```
+
+- when you change app code push to heroku
+```bash
+git push heroku master
+```
 
 
 ```
