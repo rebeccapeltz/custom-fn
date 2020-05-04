@@ -10,8 +10,8 @@ cloudinary.uploader
   .then(result => {
     console.log(result)
     cloudinary.uploader
-      .upload('https://res.cloudinary.com/cloudinary-training/image/upload/dolphin.jpg', {
-        public_id: 'dolphin',
+      .upload('https://images.pexels.com/photos/1618606/pexels-photo-1618606.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260', {
+        public_id: 'turtle',
         overwrite: true,
         invalidate: true
       })

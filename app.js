@@ -1,10 +1,11 @@
 require('dotenv').config()
 const im = require('imagemagick')
 
-var express = require('express')
-var multer = require('multer')
-var app = express()
-var fs = require('fs')
+const express = require('express')
+const multer = require('multer')
+const app = express()
+const fs = require('fs')
+const moment = require('moment')
 
 const fail = message => {
   console.log(message)
@@ -39,7 +40,7 @@ const postProcessResource = (resource, fn) => {
 }
 const transform = async file => {
   // current time as string
-  const date = new Date().toDateString()
+  const date = moment().format('MMM Do YYYY, h:mm:ss a')
   // transformation in imagemagick: resize to 314px, overlay text at x=5px, y=20px.
   const customArgs = [
     '-resize',
@@ -47,7 +48,7 @@ const transform = async file => {
     '-fill',
     'blue',
     '-draw',
-    `text 5,33 'Date cached: ${date}'`
+    `text 5,42 'Date cached: ${date}'`
   ]
   // prepare input and output files
   let inputFile = null

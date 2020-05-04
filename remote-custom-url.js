@@ -3,7 +3,7 @@ const cloudinary = require('cloudinary').v2
 
 const open = require('open')
 
-const url = cloudinary.url('shell', {
+const url = cloudinary.url('turtle', {
   sign_url: true,
   transformation: [
     {
