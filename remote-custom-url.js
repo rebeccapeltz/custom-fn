@@ -3,7 +3,7 @@ const cloudinary = require('cloudinary').v2
 
 const open = require('open')
 
-const url = cloudinary.url('turtle', {
+const url = cloudinary.url('horse', {
   sign_url: true,
   transformation: [
     {

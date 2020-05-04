@@ -1,17 +1,10 @@
 require('dotenv').config()
 const cloudinary = require('cloudinary').v2
 
-cloudinary.uploader
-  .destroy('shell', {
-    invalidate: true,
-    type: 'upload',
-    resource_type: 'image'
-  })
-  .then(result => {
-    console.log(result)
+
     cloudinary.uploader
-      .upload('https://images.pexels.com/photos/1618606/pexels-photo-1618606.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260', {
-        public_id: 'turtle',
+      .upload('https://images.pexels.com/photos/635499/pexels-photo-635499.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500', {
+        public_id: 'horse',
         overwrite: true,
         invalidate: true
       })
@@ -20,5 +13,4 @@ cloudinary.uploader
         console.log(url)
       })
       .catch(error => console.error(error))
-  })
-  .catch(error => console.error(error))
+

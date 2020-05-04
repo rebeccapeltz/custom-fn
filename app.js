@@ -40,7 +40,7 @@ const postProcessResource = (resource, fn) => {
 }
 const transform = async file => {
   // current time as string
-  const date = moment().format('MMM Do YYYY, h:mm:ss a')
+  const date = moment().format('MMM Do YYYY, h:mm a')
   // transformation in imagemagick: resize to 314px, overlay text at x=5px, y=20px.
   const customArgs = [
     '-resize',
@@ -48,7 +48,7 @@ const transform = async file => {
     '-fill',
     'blue',
     '-draw',
-    `text 5,42 'Date cached: ${date}'`
+    `text 5,15 'Date cached: ${date}'`
   ]
   // prepare input and output files
   let inputFile = null
